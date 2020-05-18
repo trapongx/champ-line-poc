@@ -16,22 +16,19 @@
 
 package com.example.bot.spring.echo;
 
+import com.linecorp.bot.model.event.Event;
+import com.linecorp.bot.model.event.MessageEvent;
+import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.FlexMessage;
+import com.linecorp.bot.model.message.Message;
+import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.model.message.flex.container.Bubble;
-import com.linecorp.bot.model.message.sender.Sender;
-import java.net.URI;
+import com.linecorp.bot.spring.boot.annotation.EventMapping;
+import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import com.linecorp.bot.model.event.Event;
-import com.linecorp.bot.model.event.MessageEvent;
-import com.linecorp.bot.model.event.message.TextMessageContent;
-import com.linecorp.bot.model.message.Message;
-import com.linecorp.bot.model.message.TextMessage;
-import com.linecorp.bot.spring.boot.annotation.EventMapping;
-import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 
 @SpringBootApplication
 @LineMessageHandler
@@ -46,17 +43,14 @@ public class EchoApplication {
     public Message handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
         log.info("event: " + event);
         final String originalMessageText = event.getMessage().getText();
-        if (originalMessageText.equals("flex")) {
-            FlexMessage message = FlexMessage
-                                          .builder()
-                                          .altText("hello")
-                                          .contents(
-                                                  Bubble.builder()
-                                                        .build())
-                                          .quickReply(null)
-                                          .build();
-            return message;
-        } else if(originalMessageText.equals("flex2")) {
+        if ("flex".equals(originalMessageText)) {
+            return FlexMessage
+               .builder()
+                  .altText("hello")
+                  .contents(Bubble.builder().build())
+                  .quickReply(null)
+              .build();
+        } else if("flex2".equals(originalMessageText)) {
             return new ExampleFlexMessageSupplier().get();
         } else {
             return new TextMessage(originalMessageText);
