@@ -32,7 +32,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.27.0'
-        classpath 'com.puppycrawl.tools:checkstyle:8.32'
+        //classpath 'com.puppycrawl.tools:checkstyle:8.32'
         classpath 'gradle.plugin.com.github.spotbugs.snom:spotbugs-gradle-plugin:4.2.0'
         classpath 'io.franzbecker:gradle-lombok:4.0.0'
         classpath 'io.spring.gradle:dependency-management-plugin:1.0.9.RELEASE'
@@ -72,7 +72,7 @@ allprojects {
 subprojects {
     apply plugin: 'com.github.spotbugs'
     apply plugin: 'java-library'
-    apply plugin: 'checkstyle'
+    //apply plugin: 'checkstyle'
     apply plugin: 'io.franzbecker.gradle-lombok'
     apply plugin: 'io.spring.dependency-management'
 
@@ -191,10 +191,10 @@ subprojects {
         }
     }
 
-    checkstyle {
+    /*checkstyle {
         configProperties = [projectDir: rootProject.projectDir]
         toolVersion = '8.23'
-    }
+    }*/
 
     tasks.withType(SpotBugsTask) {
         reports {
