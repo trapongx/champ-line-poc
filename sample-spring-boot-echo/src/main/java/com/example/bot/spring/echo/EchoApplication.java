@@ -16,6 +16,10 @@
 
 package com.example.bot.spring.echo;
 
+import com.linecorp.bot.model.message.FlexMessage;
+import com.linecorp.bot.model.message.flex.container.Bubble;
+import com.linecorp.bot.model.message.sender.Sender;
+import java.net.URI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -42,7 +46,19 @@ public class EchoApplication {
     public Message handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
         log.info("event: " + event);
         final String originalMessageText = event.getMessage().getText();
-        return new TextMessage(originalMessageText);
+        if (originalMessageText.equals("flex")) {
+            FlexMessage message = FlexMessage
+                                          .builder()
+                                          .altText("hello")
+                                          .contents(
+                                                  Bubble.builder()
+                                                        .build())
+                                          .quickReply(null)
+                                          .build();
+            return message;
+        } else {
+            return new TextMessage(originalMessageText);
+        }
     }
 
     @EventMapping
