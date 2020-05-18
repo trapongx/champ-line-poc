@@ -56,6 +56,8 @@ public class EchoApplication {
                                           .quickReply(null)
                                           .build();
             return message;
+        } else if(originalMessageText.equals("flex2")) {
+            return new ExampleFlexMessageSupplier().get();
         } else {
             return new TextMessage(originalMessageText);
         }
