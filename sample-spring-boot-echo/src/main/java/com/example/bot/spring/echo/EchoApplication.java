@@ -16,6 +16,9 @@
 
 package com.example.bot.spring.echo;
 
+import com.linecorp.bot.model.action.Action;
+import com.linecorp.bot.model.action.MessageAction;
+import com.linecorp.bot.model.action.PostbackAction;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
@@ -31,6 +34,7 @@ import com.linecorp.bot.model.message.flex.unit.FlexAlign;
 import com.linecorp.bot.model.message.flex.unit.FlexDirection;
 import com.linecorp.bot.model.message.flex.unit.FlexGravity;
 import com.linecorp.bot.model.message.flex.unit.FlexLayout;
+import com.linecorp.bot.model.message.imagemap.MessageImagemapAction;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 import java.net.URI;
@@ -111,21 +115,17 @@ public class EchoApplication {
                                                 .contents(
                                                     Arrays.asList(
                                                         Image.builder().url(new URI("https://storage.googleapis.com/s.race.thai.run/files/ad6ccbef-ade8-4922-99f6-6410af0ec71e.png")).size(
-                                                                Image.ImageSize.MD).aspectMode(Image.ImageAspectMode.Cover).aspectRatio("1:1").gravity(
-                                                                FlexGravity.CENTER).build()
+                                                                Image.ImageSize.XXL).aspectMode(Image.ImageAspectMode.Cover).aspectRatio("1:1").gravity(
+                                                                FlexGravity.CENTER).action(new MessageAction("xxx", "yyy")).build(),
+
+                                                            Image.builder().url(new URI("https://storage.googleapis.com/s.race.thai.run/files/ad6ccbef-ade8-4922-99f6-6410af0ec71e.png")).size(
+                                                                    Image.ImageSize.XXL).aspectMode(Image.ImageAspectMode.Cover).aspectRatio("1:1").gravity(
+                                                                    FlexGravity.CENTER).action(new MessageAction("aaa", "bbb")).build()
+
                                                     )
                                                 )
                                                 .build()
                                         )
-                                          .footer(
-                                              Box.builder().layout(FlexLayout.HORIZONTAL).contents(
-                                                      Arrays.asList(
-                                                              Box.builder().layout(FlexLayout.VERTICAL).contents(
-                                                                      Text.builder().text("ผู้เข้าร่วมวิ่ง :").align(FlexAlign.END).offsetEnd("10px").color("#78909C").build()
-                                                              ).build()
-                                                      )
-                                              ).build()
-                                          )
                                         .build()
                             )
                         )
