@@ -221,18 +221,18 @@ public class EchoApplication {
                                                   Arrays.asList(
                                                           Bubble.builder().direction(FlexDirection.LTR)
                                                                 .body(
-                                                                        Box.builder().content(Text.builder().text("สมัครสมาชิกแล้ว ระบบแจ้ง Email ซ้ำ (New)")
+                                                                        Box.builder().layout(FlexLayout.HORIZONTAL).content(Text.builder().text("สมัครสมาชิกแล้ว ระบบแจ้ง Email ซ้ำ (New)")
                                                                               .action(new MessageAction("pd001", "pd001")).build()).build()
                                                                 )
                                                                 .build(),
                                                           Bubble.builder().direction(FlexDirection.LTR)
                                                                 .body(
-                                                                        Box.builder().content(Text.builder().text("ลืมรหัสผ่าน/ชื่อผู้ใช้ (New)").action(new MessageAction("pd002", "pd002")).build()).build()
+                                                                        Box.builder().layout(FlexLayout.HORIZONTAL).content(Text.builder().text("ลืมรหัสผ่าน/ชื่อผู้ใช้ (New)").action(new MessageAction("pd002", "pd002")).build()).build()
                                                                 )
                                                                 .build(),
                                                           Bubble.builder().direction(FlexDirection.LTR)
                                                                 .body(
-                                                                        Box.builder().content(Text.builder().text("ยืนยันตัวตนยังไง").action(new MessageAction("pd003", "pd003")).build()).build()
+                                                                        Box.builder().layout(FlexLayout.HORIZONTAL).content(Text.builder().text("ยืนยันตัวตนยังไง").action(new MessageAction("pd003", "pd003")).build()).build()
                                                                 )
                                                                 .build()
                                                   )
