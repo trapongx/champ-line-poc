@@ -263,8 +263,9 @@ public class EchoApplication {
                                                   Arrays.asList(
                                                           Bubble.builder().direction(FlexDirection.LTR)
                                                                 .hero(
-                                                                        Box.builder().layout(FlexLayout.HORIZONTAL).content(Text.builder().text("สมัครสมาชิกแล้ว ระบบแจ้ง Email ซ้ำ (New)")
-                                                                                                                                .action(new MessageAction("pd001", "pd001")).build()).build()
+                                                                        Image.builder().url(new URI("https://app.smartsupportsystems.com/niti/img/pd001.png")).size(
+                                                                                Image.ImageSize.XXXXXL).aspectMode(Image.ImageAspectMode.Cover).aspectRatio("1:1").gravity(
+                                                                                FlexGravity.CENTER).action(new MessageAction("aaa", "pd001")).build()
                                                                 )
                                                                 .body(
                                                                         Box.builder().layout(FlexLayout.HORIZONTAL).content(Text.builder().text("สมัครสมาชิกแล้ว ระบบแจ้ง Email ซ้ำ (New)")
