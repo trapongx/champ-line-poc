@@ -79,6 +79,12 @@ public class EchoApplication {
             } catch (Throwable t) {
                 return flexError(t);
             }
+        } else if ("flex5".equals(originalMessageText)) {
+            try {
+                return flex5();
+            } catch (Throwable t) {
+                return flexError(t);
+            }
         } else if ("pd001".equals(originalMessageText)) {
             return pd001();
         } else if ("pd002".equals(originalMessageText)) {
@@ -197,6 +203,36 @@ public class EchoApplication {
                                                                                    )
                                                                            )
                                                                            .build()
+                                                                )
+                                                                .build()
+                                                  )
+                                          )
+                                          .build()
+                          )
+                          .build();
+    }
+
+    private Message flex5() throws URISyntaxException {
+        return FlexMessage.builder()
+                          .altText("งาน VRUN ที่กำลังจัดอยู่ทั้งหมด")
+                          .contents(
+                                  Carousel.builder()
+                                          .contents(
+                                                  Arrays.asList(
+                                                          Bubble.builder().direction(FlexDirection.LTR)
+                                                                .body(
+                                                                        Box.builder().content(Text.builder().text("สมัครสมาชิกแล้ว ระบบแจ้ง Email ซ้ำ (New)")
+                                                                              .action(new MessageAction("pd001", "pd001")).build()).build()
+                                                                )
+                                                                .build(),
+                                                          Bubble.builder().direction(FlexDirection.LTR)
+                                                                .body(
+                                                                        Box.builder().content(Text.builder().text("ลืมรหัสผ่าน/ชื่อผู้ใช้ (New)").action(new MessageAction("pd002", "pd002")).build()).build()
+                                                                )
+                                                                .build(),
+                                                          Bubble.builder().direction(FlexDirection.LTR)
+                                                                .body(
+                                                                        Box.builder().content(Text.builder().text("ยืนยันตัวตนยังไง").action(new MessageAction("pd003", "pd003")).build()).build()
                                                                 )
                                                                 .build()
                                                   )
