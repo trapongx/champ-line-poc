@@ -35,6 +35,7 @@ import com.linecorp.bot.model.message.flex.unit.FlexDirection;
 import com.linecorp.bot.model.message.flex.unit.FlexFontSize;
 import com.linecorp.bot.model.message.flex.unit.FlexGravity;
 import com.linecorp.bot.model.message.flex.unit.FlexLayout;
+import com.linecorp.bot.model.message.flex.unit.FlexMarginSize;
 import com.linecorp.bot.model.message.imagemap.MessageImagemapAction;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
@@ -238,6 +239,8 @@ public class EchoApplication {
                                                                                                                                 .wrap(true)
                                                                                                                                 .color("#C3C2BE")
                                                                                                                                 .size(FlexFontSize.XXS)
+                                                                                                                                .align(FlexAlign.CENTER)
+                                                                                                                                .margin(FlexMarginSize.MD)
                                                                                                                                 .action(new MessageAction("pd001", "pd001")).build()).build()
                                                                 )
                                                                 .body(
@@ -247,6 +250,15 @@ public class EchoApplication {
                                                                 )
                                                                 .build(),
                                                           Bubble.builder().direction(FlexDirection.LTR)
+                                                                .hero(
+                                                                        Box.builder().layout(FlexLayout.HORIZONTAL).content(Text.builder().text("Teacher PD : คำถาม pd002")
+                                                                                                                                .wrap(true)
+                                                                                                                                .color("#C3C2BE")
+                                                                                                                                .size(FlexFontSize.XXS)
+                                                                                                                                .align(FlexAlign.CENTER)
+                                                                                                                                .margin(FlexMarginSize.LG)
+                                                                                                                                .action(new MessageAction("pd001", "pd001")).build()).build()
+                                                                )
                                                                 .body(
                                                                         Box.builder().layout(FlexLayout.HORIZONTAL).content(Text.builder().text("ลืมรหัสผ่าน/ชื่อผู้ใช้ (New)").wrap(true).action(new MessageAction("pd002", "pd002")).build()).build()
                                                                 )
@@ -254,6 +266,15 @@ public class EchoApplication {
                                                           Bubble.builder().direction(FlexDirection.LTR)
                                                                 .body(
                                                                         Box.builder().layout(FlexLayout.HORIZONTAL).content(Text.builder().text("ยืนยันตัวตนยังไง").wrap(true).action(new MessageAction("pd003", "pd003")).build()).build()
+                                                                )
+                                                                .footer(
+                                                                        Box.builder().layout(FlexLayout.HORIZONTAL).content(Text.builder().text("Teacher PD : คำถาม pd001")
+                                                                                                                                .wrap(true)
+                                                                                                                                .color("#C3C2BE")
+                                                                                                                                .size(FlexFontSize.XXS)
+                                                                                                                                .align(FlexAlign.CENTER)
+                                                                                                                                .margin(FlexMarginSize.LG)
+                                                                                                                                .action(new MessageAction("pd001", "pd001")).build()).build()
                                                                 )
                                                                 .build()
                                                   )
