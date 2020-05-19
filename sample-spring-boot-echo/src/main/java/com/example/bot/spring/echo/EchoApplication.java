@@ -73,8 +73,16 @@ public class EchoApplication {
             } catch (Throwable t) {
                 return flexError(t);
             }
+        } else if ("flex4".equals(originalMessageText)) {
+            try {
+                return flex4();
+            } catch (Throwable t) {
+                return flexError(t);
+            }
         } else if ("pd001".equals(originalMessageText)) {
             return pd001();
+        } else if ("pd002".equals(originalMessageText)) {
+            return pd002();
         } else {
             return new TextMessage(originalMessageText);
         }
@@ -122,9 +130,40 @@ public class EchoApplication {
 
                                                             Image.builder().url(new URI("https://storage.googleapis.com/s.race.thai.run/files/ad6ccbef-ade8-4922-99f6-6410af0ec71e.png")).size(
                                                                     Image.ImageSize.XXXXXL).aspectMode(Image.ImageAspectMode.Cover).aspectRatio("1:1").gravity(
-                                                                    FlexGravity.CENTER).action(new MessageAction("aaa", "bbb")).build()
+                                                                    FlexGravity.CENTER).action(new MessageAction("aaa", "bbb")).build(),
 
-                                                    )
+                                                            Image.builder().url(new URI("https://storage.googleapis.com/s.race.thai.run/files/ad6ccbef-ade8-4922-99f6-6410af0ec71e.png")).size(
+                                                                    Image.ImageSize.XXXXXL).aspectMode(Image.ImageAspectMode.Cover).aspectRatio("1:1").gravity(
+                                                                    FlexGravity.CENTER).action(new MessageAction("aaa", "bbb")).build(),
+
+                                                            Image.builder().url(new URI("https://storage.googleapis.com/s.race.thai.run/files/ad6ccbef-ade8-4922-99f6-6410af0ec71e.png")).size(
+                                                                    Image.ImageSize.XXXXXL).aspectMode(Image.ImageAspectMode.Cover).aspectRatio("1:1").gravity(
+                                                                    FlexGravity.CENTER).action(new MessageAction("aaa", "bbb")).build(),
+
+                                                            Image.builder().url(new URI("https://storage.googleapis.com/s.race.thai.run/files/ad6ccbef-ade8-4922-99f6-6410af0ec71e.png")).size(
+                                                                    Image.ImageSize.XXXXXL).aspectMode(Image.ImageAspectMode.Cover).aspectRatio("1:1").gravity(
+                                                                    FlexGravity.CENTER).action(new MessageAction("aaa", "bbb")).build(),
+
+                                                            Image.builder().url(new URI("https://storage.googleapis.com/s.race.thai.run/files/ad6ccbef-ade8-4922-99f6-6410af0ec71e.png")).size(
+                                                                    Image.ImageSize.XXXXXL).aspectMode(Image.ImageAspectMode.Cover).aspectRatio("1:1").gravity(
+                                                                    FlexGravity.CENTER).action(new MessageAction("aaa", "bbb")).build(),
+
+                                                            Image.builder().url(new URI("https://storage.googleapis.com/s.race.thai.run/files/ad6ccbef-ade8-4922-99f6-6410af0ec71e.png")).size(
+                                                                    Image.ImageSize.XXXXXL).aspectMode(Image.ImageAspectMode.Cover).aspectRatio("1:1").gravity(
+                                                                    FlexGravity.CENTER).action(new MessageAction("aaa", "bbb")).build(),
+
+                                                            Image.builder().url(new URI("https://storage.googleapis.com/s.race.thai.run/files/ad6ccbef-ade8-4922-99f6-6410af0ec71e.png")).size(
+                                                                    Image.ImageSize.XXXXXL).aspectMode(Image.ImageAspectMode.Cover).aspectRatio("1:1").gravity(
+                                                                    FlexGravity.CENTER).action(new MessageAction("aaa", "bbb")).build(),
+
+                                                            Image.builder().url(new URI("https://app.smartsupportsystems.com/niti/img/pd001.png")).size(
+                                                                    Image.ImageSize.XXXXXL).aspectMode(Image.ImageAspectMode.Cover).aspectRatio("1:1").gravity(
+                                                                    FlexGravity.CENTER).action(new MessageAction("aaa", "pd001")).build(),
+
+                                                            Image.builder().url(new URI("https://app.smartsupportsystems.com/niti/img/pd002.png")).size(
+                                                                    Image.ImageSize.XXXXXL).aspectMode(Image.ImageAspectMode.Cover).aspectRatio("1:1").gravity(
+                                                                    FlexGravity.CENTER).action(new MessageAction("aaa", "pd002")).build()
+                                                            )
                                                 )
                                                 .build()
                                         )
@@ -136,6 +175,37 @@ public class EchoApplication {
             .build();
     }
 
+    private Message flex4() throws URISyntaxException {
+        return FlexMessage.builder()
+                          .altText("งาน VRUN ที่กำลังจัดอยู่ทั้งหมด")
+                          .contents(
+                                  Carousel.builder()
+                                          .contents(
+                                                  Arrays.asList(
+                                                          Bubble.builder().direction(FlexDirection.LTR)
+                                                                .body(
+                                                                        Box.builder().layout(FlexLayout.HORIZONTAL)
+                                                                           .contents(
+                                                                                   Arrays.asList(
+                                                                                           Image.builder().url(new URI("https://app.smartsupportsystems.com/niti/img/pd001.png")).size(
+                                                                                                   Image.ImageSize.XXXXXL).aspectMode(Image.ImageAspectMode.Cover).aspectRatio("1:1").gravity(
+                                                                                                   FlexGravity.CENTER).action(new MessageAction("aaa", "pd001")).build(),
+
+                                                                                           Image.builder().url(new URI("https://app.smartsupportsystems.com/niti/img/pd002.png")).size(
+                                                                                                   Image.ImageSize.XXXXXL).aspectMode(Image.ImageAspectMode.Cover).aspectRatio("1:1").gravity(
+                                                                                                   FlexGravity.CENTER).action(new MessageAction("aaa", "pd002")).build()
+                                                                                   )
+                                                                           )
+                                                                           .build()
+                                                                )
+                                                                .build()
+                                                  )
+                                          )
+                                          .build()
+                          )
+                          .build();
+    }
+
     private Message pd001() {
         return TextMessage.builder().text("ตอบ จากปัญหาที่แจ้งมาคุณครูสามารถล็อกอินเข้าใช้งานด้วย email ได้ โดยคุณครูต้องทำการกดลืมรัหสผ่าน ตามขั้นตอนดังนี้\n" +
                                                   "1.\tกดที่ปุ่ม “เข้าสู่ระบบ/สมัครสมาชิก”\n" +
@@ -145,5 +215,16 @@ public class EchoApplication {
                                                   "5.\tคลิกที่ “ลิงก์สำหรับตั้งค่ารหัสผ่านใหม่” (Email ตั้งรหัสใหม่จะหมดอายุภายใน5 นาที) ระบบแสดงหน้าให้กรอกรหัสผ่านใหม่ และยืนยันรหัสผ่าน (การยืนยันรหัสผ่าน คือ การกรอกรหัสผ่านให้เหมือนกับช่องรหัสผ่านใหม่)\n" +
                                                   "6.\t หากกรอกรหัสผ่านทั้ง 2 ช่องไม่ตรงกัน ระบบจะแสดงข้อความเตือน “รหัสผ่านที่ระบุไม่ตรงกัน”\n" +
                                                   "7.\tเมื่อตั้งรหัสใหม่ได้แล้ว ระบบจะ login ให้ทันที ").build();
+    }
+
+    private Message pd002() {
+        return TextMessage.builder().text("ตอบ คุณครูสามารถล็อกอินเข้าใช้งานด้วย email ได้ค่ะ คุณครูทำการกดลืมรัหสผ่าน ตามขั้นตอนดังนี้\n" +
+                                                  "1.\tกดที่ปุ่ม “เข้าสู่ระบบ/สมัครสมาชิก”\n" +
+                                                  "2.\tกดที่ “ลืมรหัสผ่านใช่หรือไม่”\n" +
+                                                  "3.\tกรอก ชื่อผู้ใช้ (username) หรือ อีเมล์ที่สมัครสมาชิก\n" +
+                                                  "4.\tตรวจสอบที่อีเมลของคุณครู โดยตรวจสอบที่กล่องขาเข้า (Inbox) และ อีเมลขยะ (Junk Mail)\n" +
+                                                  "5.\tคลิกที่ “ลิงก์สำหรับตั้งค่ารหัสผ่านใหม่” (Email ตั้งรหัสใหม่จะหมดอายุภายใน5 นาที) ระบบแสดงหน้าให้กรอกรหัสผ่านใหม่ และยืนยันรหัสผ่าน (การยืนยันรหัสผ่าน คือ การกรอกรหัสผ่านให้เหมือนกับช่องรหัสผ่านใหม่)\n" +
+                                                  "6.\t หากกรอกรหัสผ่านทั้ง 2 ช่องไม่ตรงกัน ระบบจะแสดงข้อความเตือน “รหัสผ่านที่ระบุไม่ตรงกัน”\n" +
+                                                  "7.\tเมื่อตั้งรหัสใหม่ได้แล้ว ระบบจะ login ให้ทันที").build();
     }
 }
