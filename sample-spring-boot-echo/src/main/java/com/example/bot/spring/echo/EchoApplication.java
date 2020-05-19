@@ -32,6 +32,7 @@ import com.linecorp.bot.model.message.flex.container.Bubble;
 import com.linecorp.bot.model.message.flex.container.Carousel;
 import com.linecorp.bot.model.message.flex.unit.FlexAlign;
 import com.linecorp.bot.model.message.flex.unit.FlexDirection;
+import com.linecorp.bot.model.message.flex.unit.FlexFontSize;
 import com.linecorp.bot.model.message.flex.unit.FlexGravity;
 import com.linecorp.bot.model.message.flex.unit.FlexLayout;
 import com.linecorp.bot.model.message.imagemap.MessageImagemapAction;
@@ -232,6 +233,13 @@ public class EchoApplication {
                                           .contents(
                                                   Arrays.asList(
                                                           Bubble.builder().direction(FlexDirection.LTR)
+                                                                .hero(
+                                                                        Box.builder().layout(FlexLayout.HORIZONTAL).content(Text.builder().text("Teacher PD : คำถาม pd001")
+                                                                                                                                .wrap(true)
+                                                                                                                                .color("gray")
+                                                                                                                                .size(FlexFontSize.XXS)
+                                                                                                                                .action(new MessageAction("pd001", "pd001")).build()).build()
+                                                                )
                                                                 .body(
                                                                         Box.builder().layout(FlexLayout.HORIZONTAL).content(Text.builder().text("สมัครสมาชิกแล้ว ระบบแจ้ง Email ซ้ำ (New)")
                                                                                 .wrap(true)
