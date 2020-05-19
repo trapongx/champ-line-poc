@@ -22,9 +22,20 @@ import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.FlexMessage;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
+import com.linecorp.bot.model.message.flex.component.Box;
+import com.linecorp.bot.model.message.flex.component.Image;
+import com.linecorp.bot.model.message.flex.component.Text;
 import com.linecorp.bot.model.message.flex.container.Bubble;
+import com.linecorp.bot.model.message.flex.container.Carousel;
+import com.linecorp.bot.model.message.flex.unit.FlexAlign;
+import com.linecorp.bot.model.message.flex.unit.FlexDirection;
+import com.linecorp.bot.model.message.flex.unit.FlexGravity;
+import com.linecorp.bot.model.message.flex.unit.FlexLayout;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -52,6 +63,12 @@ public class EchoApplication {
               .build();
         } else if("flex2".equals(originalMessageText)) {
             return new ExampleFlexMessageSupplier().get();
+        } else if ("flex3".equals(originalMessageText)) {
+            try {
+                return flex3();
+            } catch (Throwable t) {
+                return flexError(t);
+            }
         } else {
             return new TextMessage(originalMessageText);
         }
@@ -60,5 +77,60 @@ public class EchoApplication {
     @EventMapping
     public void handleDefaultMessageEvent(Event event) {
         System.out.println("event: " + event);
+    }
+
+    private Message flexError(Throwable t) {
+        return FlexMessage.builder()
+                   .altText("งาน VRUN ที่กำลังจัดอยู่ทั้งหมด")
+                   .contents(
+                           Carousel.builder()
+                                   .contents(
+                                           Arrays.asList(
+                                                   Bubble.builder().direction(FlexDirection.LTR)
+                                                         .body(
+                                                   Box.builder().layout(FlexLayout.VERTICAL)
+                                                      .contents(
+                                                              Arrays.asList(Text.builder().text("Error: " + t.getMessage()).build())
+                                                      ).build()
+                                                    ).build()
+                                            )
+                                   ).build()
+                   ).build();
+    }
+
+    private Message flex3() throws URISyntaxException {
+        return FlexMessage.builder()
+            .altText("งาน VRUN ที่กำลังจัดอยู่ทั้งหมด")
+            .contents(
+                    Carousel.builder()
+                        .contents(
+                                Arrays.asList(
+                                    Bubble.builder().direction(FlexDirection.LTR)
+                                        .body(
+                                            Box.builder().layout(FlexLayout.VERTICAL)
+                                                .contents(
+                                                    Arrays.asList(
+                                                        Image.builder().url(new URI("https://storage.googleapis.com/s.race.thai.run/files/ad6ccbef-ade8-4922-99f6-6410af0ec71e.png")).size(
+                                                                Image.ImageSize.MD).aspectMode(Image.ImageAspectMode.Cover).aspectRatio("1:1").gravity(
+                                                                FlexGravity.CENTER).build()
+                                                    )
+                                                )
+                                                .build()
+                                        )
+                                          .footer(
+                                              Box.builder().layout(FlexLayout.HORIZONTAL).contents(
+                                                      Arrays.asList(
+                                                              Box.builder().layout(FlexLayout.VERTICAL).contents(
+                                                                      Text.builder().text("ผู้เข้าร่วมวิ่ง :").align(FlexAlign.END).offsetEnd("10px").color("#78909C").build()
+                                                              ).build()
+                                                      )
+                                              ).build()
+                                          )
+                                        .build()
+                            )
+                        )
+                        .build()
+            )
+            .build();
     }
 }
