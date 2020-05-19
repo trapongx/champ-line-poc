@@ -111,15 +111,15 @@ public class EchoApplication {
                                 Arrays.asList(
                                     Bubble.builder().direction(FlexDirection.LTR)
                                         .body(
-                                            Box.builder().layout(FlexLayout.VERTICAL)
+                                            Box.builder().layout(FlexLayout.HORIZONTAL)
                                                 .contents(
                                                     Arrays.asList(
                                                         Image.builder().url(new URI("https://storage.googleapis.com/s.race.thai.run/files/ad6ccbef-ade8-4922-99f6-6410af0ec71e.png")).size(
-                                                                Image.ImageSize.XXL).aspectMode(Image.ImageAspectMode.Cover).aspectRatio("1:1").gravity(
+                                                                Image.ImageSize.XXXXXL).aspectMode(Image.ImageAspectMode.Fit).gravity(
                                                                 FlexGravity.CENTER).action(new MessageAction("xxx", "yyy")).build(),
 
                                                             Image.builder().url(new URI("https://storage.googleapis.com/s.race.thai.run/files/ad6ccbef-ade8-4922-99f6-6410af0ec71e.png")).size(
-                                                                    Image.ImageSize.XXL).aspectMode(Image.ImageAspectMode.Cover).aspectRatio("1:1").gravity(
+                                                                    Image.ImageSize.XXXXXL).aspectMode(Image.ImageAspectMode.Fit).gravity(
                                                                     FlexGravity.CENTER).action(new MessageAction("aaa", "bbb")).build()
 
                                                     )
