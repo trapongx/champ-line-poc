@@ -236,7 +236,7 @@ public class EchoApplication {
                                                                 .hero(
                                                                         Box.builder().layout(FlexLayout.HORIZONTAL).content(Text.builder().text("Teacher PD : คำถาม pd001")
                                                                                                                                 .wrap(true)
-                                                                                                                                .color("gray")
+                                                                                                                                .color("#C3C2BE")
                                                                                                                                 .size(FlexFontSize.XXS)
                                                                                                                                 .action(new MessageAction("pd001", "pd001")).build()).build()
                                                                 )
