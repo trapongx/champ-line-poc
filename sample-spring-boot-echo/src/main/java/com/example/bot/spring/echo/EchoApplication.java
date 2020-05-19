@@ -234,17 +234,18 @@ public class EchoApplication {
                                                           Bubble.builder().direction(FlexDirection.LTR)
                                                                 .body(
                                                                         Box.builder().layout(FlexLayout.HORIZONTAL).content(Text.builder().text("สมัครสมาชิกแล้ว ระบบแจ้ง Email ซ้ำ (New)")
+                                                                                .wrap(true)
                                                                               .action(new MessageAction("pd001", "pd001")).build()).build()
                                                                 )
                                                                 .build(),
                                                           Bubble.builder().direction(FlexDirection.LTR)
                                                                 .body(
-                                                                        Box.builder().layout(FlexLayout.HORIZONTAL).content(Text.builder().text("ลืมรหัสผ่าน/ชื่อผู้ใช้ (New)").action(new MessageAction("pd002", "pd002")).build()).build()
+                                                                        Box.builder().layout(FlexLayout.HORIZONTAL).content(Text.builder().text("ลืมรหัสผ่าน/ชื่อผู้ใช้ (New)").wrap(true).action(new MessageAction("pd002", "pd002")).build()).build()
                                                                 )
                                                                 .build(),
                                                           Bubble.builder().direction(FlexDirection.LTR)
                                                                 .body(
-                                                                        Box.builder().layout(FlexLayout.HORIZONTAL).content(Text.builder().text("ยืนยันตัวตนยังไง").action(new MessageAction("pd003", "pd003")).build()).build()
+                                                                        Box.builder().layout(FlexLayout.HORIZONTAL).content(Text.builder().text("ยืนยันตัวตนยังไง").wrap(true).action(new MessageAction("pd003", "pd003")).build()).build()
                                                                 )
                                                                 .build()
                                                   )
@@ -268,7 +269,7 @@ public class EchoApplication {
                                                                                 FlexGravity.CENTER).action(new MessageAction("aaa", "pd001")).build()
                                                                 )
                                                                 .body(
-                                                                        Box.builder().layout(FlexLayout.HORIZONTAL).content(Text.builder().text("สมัครสมาชิกแล้ว ระบบแจ้ง Email ซ้ำ (New)")
+                                                                        Box.builder().layout(FlexLayout.HORIZONTAL).content(Text.builder().text("สมัครสมาชิกแล้ว ระบบแจ้ง Email ซ้ำ (New)").maxLines(10)
                                                                                                                                 .action(new MessageAction("pd001", "pd001")).build()).build()
                                                                 )
                                                                 .footer(
