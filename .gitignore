@@ -55,3 +55,4 @@ local.properties
 .buildpath
 integration_test_settings.yml
 /sample-spring-boot-echo/src/main/resources/application.yml
+/tokens/StoredCredential
