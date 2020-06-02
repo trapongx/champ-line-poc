@@ -30,13 +30,28 @@ import com.linecorp.bot.model.message.flex.unit.*
 import com.linecorp.bot.spring.boot.annotation.EventMapping
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.context.event.ApplicationReadyEvent
+import org.springframework.context.event.EventListener
 
 @SpringBootApplication
 @LineMessageHandler
 open class EchoApplication {
     private val log = LoggerFactory.getLogger(EchoApplication::class.java)
+
+    @Autowired
+    private lateinit var loadDataController: LoadDataController
+
+    @EventListener
+    fun loadDataOnStart(event: ApplicationReadyEvent) {
+        try {
+            loadDataController.loadData()
+        } catch (t: Throwable) {
+            t.printStackTrace()
+        }
+    }
 
     @EventMapping
     fun handleTextMessageEvent(event: MessageEvent<TextMessageContent>): Message {
