@@ -1,0 +1,46 @@
+#
+# Copyright 2016 LINE Corporation
+#
+# LINE Corporation licenses this file to you under the Apache License,
+# version 2.0 (the "License"); you may not use this file except in compliance
+# with the License. You may obtain a copy of the License at:
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+
+# This is a template for the configuration file.
+# Make a copy called `application.yml` and change the values below.
+
+line.bot:
+  channel-token: P/mO92BwULgs9zDvO0ys7G6dNl5HnZ18fOO7LxBvW7Hb9pVVUubGklOBO9n+r/1rfui5IMt0u752sWrlnspJiyo8wdZjR/H1MsAouBnOADyL86A3M3m3P4ZhcP+7KbsA4vQR8kiqS8dkpPo6FpD7FQdB04t89/1O/w1cDnyilFU=
+  channel-secret: 44aab238f77aaed7ef0363919f5c6c7c
+  handler.path: /callback
+
+# To remove Client wire logs. Please comment out following lines.
+# See: https://docs.spring.io/spring-boot/docs/current/reference/html/howto-logging.html
+#
+#logging.level:
+server:
+  port: 64111
+#   com.linecorp.bot.client.wire: INFO
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        opaquetoken:
+          client-id: 208488188586-0v68279pon8q4a67h3ch6e6ikanhf9p8.apps.googleusercontent.com
+          client-secret: eF86ShX912ofIhDhuN8q8_Cm
+
+ipst:
+  google:
+    applicationName: IPST Line Chatbot
+    host: champ-line-poc.heroku.com
+    port: 443
+    callbackPath: /Callback
+    credentialsFilePath: /credentials.json
+    spreadsheetId: 1YXKi-edabERHUg4v1OSBLcylZv7ol0PW69inID7cH7k
