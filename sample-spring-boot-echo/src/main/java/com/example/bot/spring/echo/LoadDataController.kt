@@ -45,6 +45,10 @@ class LoadDataController {
      */
     private val SCOPES = listOf(SheetsScopes.SPREADSHEETS_READONLY)
 
+    private val receiver by lazy {
+        LocalServerReceiver.Builder()
+            .setHost(cfg.host).setPort(cfg.port.toInt()).setCallbackPath(cfg.callbackPath).build()
+    }
     /**
      * Creates an authorized Credential object.
      * @param HTTP_TRANSPORT The network HTTP Transport.
@@ -64,8 +68,6 @@ class LoadDataController {
             .setDataStoreFactory(FileDataStoreFactory(File(TOKENS_DIRECTORY_PATH)))
             .setAccessType("offline")
             .build()
-        val receiver = LocalServerReceiver.Builder()
-            .setHost(cfg.host).setPort(cfg.port.toInt()).setCallbackPath(cfg.callbackPath).build()
         return AuthorizationCodeInstalledApp(flow, receiver).authorize("user")
     }
 
