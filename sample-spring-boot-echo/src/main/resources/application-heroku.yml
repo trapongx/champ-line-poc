@@ -33,8 +33,8 @@ spring:
     oauth2:
       resourceserver:
         opaquetoken:
-          client-id: 208488188586-0v68279pon8q4a67h3ch6e6ikanhf9p8.apps.googleusercontent.com
-          client-secret: eF86ShX912ofIhDhuN8q8_Cm
+          client-id: 208488188586-1f9143kat1qe31r6og3fnfnugndh81jk.apps.googleusercontent.com
+          client-secret: MeE_R80xQ-DC1zIv25SarG1Q
 
 ipst:
   google:
@@ -42,5 +42,5 @@ ipst:
     host: champ-line-poc.heroku.com
     port: 443
     callbackPath: /Callback
-    credentialsFilePath: /credentials.json
+    credentialsFilePath: /credentials-heroku.json
     spreadsheetId: 1YXKi-edabERHUg4v1OSBLcylZv7ol0PW69inID7cH7k
