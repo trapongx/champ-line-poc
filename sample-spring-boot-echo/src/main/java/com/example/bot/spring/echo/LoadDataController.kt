@@ -45,7 +45,11 @@ class LoadDataController : VerificationCodeReceiver {
 
     override fun waitForCode(): String {
         waitUnlessSignaled!!.acquireUninterruptibly()
-        return code!!
+        try {
+            return code!!
+        } finally {
+            waitUnlessSignaled = null
+        }
     }
 
     override fun stop() {
@@ -102,6 +106,7 @@ class LoadDataController : VerificationCodeReceiver {
         logger.info("OAuth callback with code=$code and error=$error")
         waitUnlessSignaled?.release()
         this.code = code
+
         return ResponseEntity<Any?>("OAuth token received successfully", HttpStatus.OK)
     }
 
