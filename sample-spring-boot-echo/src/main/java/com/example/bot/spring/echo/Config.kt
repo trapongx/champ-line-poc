@@ -13,6 +13,5 @@ class Config {
 
     lateinit var callbackUrl: String
 
-    @Value("\${ipst.google.credentialsFilePath}")
     lateinit var credentialsFilePath: String
 }

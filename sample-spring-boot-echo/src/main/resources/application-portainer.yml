@@ -17,8 +17,8 @@
 # Make a copy called `application.yml` and change the values below.
 
 line.bot:
-  channel-token: P/mO92BwULgs9zDvO0ys7G6dNl5HnZ18fOO7LxBvW7Hb9pVVUubGklOBO9n+r/1rfui5IMt0u752sWrlnspJiyo8wdZjR/H1MsAouBnOADyL86A3M3m3P4ZhcP+7KbsA4vQR8kiqS8dkpPo6FpD7FQdB04t89/1O/w1cDnyilFU=
-  channel-secret: 44aab238f77aaed7ef0363919f5c6c7c
+  channel-token: KhmoPCjfU7g1DPpYdbd9xcfVfVID3wBVw6vD0oqTp3oMtLZOO7/4l2CHtbxm4B6J5dh5oKJGlT7HwX/HpoTJ6/4jWxEBTPJKTlHItM6c9TRaZQBQVFGdmt1BgKrTya70YQtUUwb2W1SXPSIMVuOEIQdB04t89/1O/w1cDnyilFU=
+  channel-secret: 843a0c9a198618aafd8367796d267dc6
   handler.path: /callback
 
 # To remove Client wire logs. Please comment out following lines.
@@ -36,10 +36,9 @@ spring:
           client-id: 208488188586-0v68279pon8q4a67h3ch6e6ikanhf9p8.apps.googleusercontent.com
           client-secret: eF86ShX912ofIhDhuN8q8_Cm
 
-app:
-  applicationName: IPST LINE Chatbot
-  host: jiraams.g-able.com
-  port: 443
-  callbackPath: /ipst-line-chatbot/Callback
-  credentialsFilePath: /credentials-portainer.json
-  spreadsheetId: 1YXKi-edabERHUg4v1OSBLcylZv7ol0PW69inID7cH7k
+ipst:
+  google:
+    applicationName: IPST LINE Chatbot
+    callbackUrl: https://jiraams.g-able.com/ipst-line-chatbot/gApi/callback
+    credentialsFilePath: /credentials-portainer.json
+    spreadsheetId: 1YXKi-edabERHUg4v1OSBLcylZv7ol0PW69inID7cH7k
