@@ -39,8 +39,6 @@ spring:
 ipst:
   google:
     applicationName: IPST Line Chatbot
-    host: champ-line-poc-359bf839.localhost.run
-    port: 443
-    callbackPath: /Callback
-    credentialsFilePath: /credentials.json
+    callbackUrl: https://champ-line-poc-2d0e42ba.localhost.run/gApi/callback
+    credentialsFilePath: /credentials-localhost.json
     spreadsheetId: 1YXKi-edabERHUg4v1OSBLcylZv7ol0PW69inID7cH7k

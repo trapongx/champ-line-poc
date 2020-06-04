@@ -41,5 +41,5 @@ app:
   host: jiraams.g-able.com
   port: 443
   callbackPath: /ipst-line-chatbot/Callback
-  credentialsFilePath: /credentials.json
+  credentialsFilePath: /credentials-portainer.json
   spreadsheetId: 1YXKi-edabERHUg4v1OSBLcylZv7ol0PW69inID7cH7k

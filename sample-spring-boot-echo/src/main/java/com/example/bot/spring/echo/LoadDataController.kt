@@ -2,7 +2,7 @@ package com.example.bot.spring.echo
 
 import com.google.api.client.auth.oauth2.Credential
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp
-import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver
+import com.google.api.client.extensions.java6.auth.oauth2.VerificationCodeReceiver
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
@@ -12,31 +12,53 @@ import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.client.util.store.FileDataStoreFactory
 import com.google.api.services.sheets.v4.Sheets
 import com.google.api.services.sheets.v4.SheetsScopes
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.stereotype.Component
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.*
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStreamReader
 import java.security.GeneralSecurityException
+import java.util.concurrent.Semaphore
 
 @RestController
-@RequestMapping("/loadData")
-
-class LoadDataController {
-
-    @Autowired
-    private lateinit var cfg: Config
+@RequestMapping("/gApi")
+class LoadDataController : VerificationCodeReceiver {
 
     companion object {
         private val JSON_FACTORY: JsonFactory = JacksonFactory.getDefaultInstance()
 
         private const val TOKENS_DIRECTORY_PATH = "tokens"
+
+        private val logger = LoggerFactory.getLogger(LoadDataController::class.java)
+    }
+
+    @Autowired
+    private lateinit var cfg: Config
+
+    private var code: String? = null
+
+    var waitUnlessSignaled: Semaphore? = null
+
+    override fun waitForCode(): String {
+        waitUnlessSignaled!!.acquireUninterruptibly()
+        return code!!
+    }
+
+    override fun stop() {
+        waitUnlessSignaled?.release()
+    }
+
+    override fun getRedirectUri(): String {
+        if (waitUnlessSignaled == null) {
+            waitUnlessSignaled = Semaphore(0)
+        } else {
+            throw Exception("Concurrent google API authentication")
+        }
+        return cfg.callbackUrl
     }
 
     /**
@@ -45,10 +67,6 @@ class LoadDataController {
      */
     private val SCOPES = listOf(SheetsScopes.SPREADSHEETS_READONLY)
 
-    private val receiver by lazy {
-        LocalServerReceiver.Builder()
-            .setHost(cfg.host).setPort(cfg.port.toInt()).setCallbackPath(cfg.callbackPath).build()
-    }
     /**
      * Creates an authorized Credential object.
      * @param HTTP_TRANSPORT The network HTTP Transport.
@@ -68,12 +86,29 @@ class LoadDataController {
             .setDataStoreFactory(FileDataStoreFactory(File(TOKENS_DIRECTORY_PATH)))
             .setAccessType("offline")
             .build()
-        return AuthorizationCodeInstalledApp(flow, receiver).authorize("user")
+        return AuthorizationCodeInstalledApp(flow, this).authorize("user")
     }
 
-    @GetMapping("")
+    @GetMapping("/callback")
+    fun callback(
+        @RequestParam("code", required = false) code: String?,
+        @RequestParam("error", required = false) error: String?,
+        @RequestParam("scope", required = false) scope: String?
+    ): ResponseEntity<*> {
+        if (!error.isNullOrBlank()) {
+            logger.error(error)
+            return ResponseEntity<Any?>("OAuth token not received: error = $error", HttpStatus.OK)
+        }
+        logger.info("OAuth callback with code=$code and error=$error")
+        waitUnlessSignaled?.release()
+        this.code = code
+        return ResponseEntity<Any?>("OAuth token received successfully", HttpStatus.OK)
+    }
+
+    @GetMapping("/loadData")
     @Throws(IOException::class, GeneralSecurityException::class)
     fun loadData(): String {
+        logger.info("Starting loadData")
         var errorCount = 0
         try {
             // Build a new authorized API client service.
@@ -106,10 +141,14 @@ class LoadDataController {
                     } ?: listOf()
                 }
             }
-            return "Success with ${errorCount} errors"
+            val message = "Data loaded success with ${errorCount} errors. Number of question sets = ${EchoApplication.questionAndAnswerSets.size}. Total number of questions = ${EchoApplication.questionAndAnswerSets.sumBy { it.questionAndAnswers.size }}"
+            logger.info(message)
+            return message
         } catch (t: Throwable) {
             t.printStackTrace()
-            return "Failed: ${t.message ?: t.toString()}"
+            val message = t.message ?: t.toString()
+            logger.error(message)
+            return "Failed: $message"
         }
     }
 }

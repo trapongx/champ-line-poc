@@ -11,11 +11,7 @@ class Config {
 
     lateinit var spreadsheetId: String
 
-    lateinit var host: String
-
-    lateinit var port: String
-
-    lateinit var callbackPath: String
+    lateinit var callbackUrl: String
 
     @Value("\${ipst.google.credentialsFilePath}")
     lateinit var credentialsFilePath: String
