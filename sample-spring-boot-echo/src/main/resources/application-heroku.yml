@@ -39,7 +39,7 @@ spring:
 ipst:
   google:
     applicationName: IPST Line Chatbot
-    host: champ-line-poc.heroku.com
+    host: champ-line-poc.herokuapp.com
     port: 6443
     callbackPath: /Callback
     credentialsFilePath: /credentials-heroku.json
