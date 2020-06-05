@@ -39,6 +39,6 @@ spring:
 ipst:
   google:
     applicationName: IPST LINE Chatbot
-    callbackUrl: https://jiraams.g-able.com/ipst-line-chatbot/gApi/callback
+    callbackUrl: https://jiraams.g-able.com/gApi/callback
     credentialsFilePath: /credentials-portainer.json
     spreadsheetId: 1YXKi-edabERHUg4v1OSBLcylZv7ol0PW69inID7cH7k

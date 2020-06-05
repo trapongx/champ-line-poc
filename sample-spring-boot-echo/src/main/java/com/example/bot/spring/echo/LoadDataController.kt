@@ -1,8 +1,7 @@
 package com.example.bot.spring.echo
 
 import com.google.api.client.auth.oauth2.Credential
-import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp
-import com.google.api.client.extensions.java6.auth.oauth2.VerificationCodeReceiver
+import com.google.api.client.auth.oauth2.TokenResponse
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
@@ -16,17 +15,20 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RestController
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStreamReader
 import java.security.GeneralSecurityException
-import java.util.concurrent.Semaphore
+import javax.servlet.http.HttpServletResponse
 
 @RestController
 @RequestMapping("/gApi")
-class LoadDataController : VerificationCodeReceiver {
+class LoadDataController {
 
     companion object {
         private val JSON_FACTORY: JsonFactory = JacksonFactory.getDefaultInstance()
@@ -41,44 +43,13 @@ class LoadDataController : VerificationCodeReceiver {
 
     private var code: String? = null
 
-    var waitUnlessSignaled: Semaphore? = null
-
-    override fun waitForCode(): String {
-        waitUnlessSignaled!!.acquireUninterruptibly()
-        try {
-            return code!!
-        } finally {
-            waitUnlessSignaled = null
-        }
-    }
-
-    override fun stop() {
-        waitUnlessSignaled?.release()
-    }
-
-    override fun getRedirectUri(): String {
-        if (waitUnlessSignaled == null) {
-            waitUnlessSignaled = Semaphore(0)
-        } else {
-            throw Exception("Concurrent google API authentication")
-        }
-        return cfg.callbackUrl
-    }
-
     /**
      * Global instance of the scopes required by this quickstart.
      * If modifying these scopes, delete your previously saved tokens/ folder.
      */
     private val SCOPES = listOf(SheetsScopes.SPREADSHEETS_READONLY)
 
-    /**
-     * Creates an authorized Credential object.
-     * @param HTTP_TRANSPORT The network HTTP Transport.
-     * @return An authorized Credential object.
-     * @throws IOException If the credentials.json file cannot be found.
-     */
-    @Throws(IOException::class)
-    private fun getCredentials(HTTP_TRANSPORT: NetHttpTransport): Credential {
+    fun getGoogleAuthorizationFlow(HTTP_TRANSPORT: NetHttpTransport): GoogleAuthorizationCodeFlow {
         // Load client secrets.
         val `in` = EchoApplication::class.java.getResourceAsStream(cfg.credentialsFilePath)
             ?: throw FileNotFoundException("Resource not found: $${cfg.credentialsFilePath}")
@@ -90,35 +61,69 @@ class LoadDataController : VerificationCodeReceiver {
             .setDataStoreFactory(FileDataStoreFactory(File(TOKENS_DIRECTORY_PATH)))
             .setAccessType("offline")
             .build()
-        return AuthorizationCodeInstalledApp(flow, this).authorize("user")
+
+        return flow
     }
 
     @GetMapping("/callback")
     fun callback(
         @RequestParam("code", required = false) code: String?,
         @RequestParam("error", required = false) error: String?,
-        @RequestParam("scope", required = false) scope: String?
-    ): ResponseEntity<*> {
+        @RequestParam("scope", required = false) scope: String?,
+        response: HttpServletResponse
+    ): Any {
         if (!error.isNullOrBlank()) {
             logger.error(error)
             return ResponseEntity<Any?>("OAuth token not received: error = $error", HttpStatus.OK)
         }
         logger.info("OAuth callback with code=$code and error=$error")
-        waitUnlessSignaled?.release()
         this.code = code
 
-        return ResponseEntity<Any?>("OAuth token received successfully", HttpStatus.OK)
+        // Build a new authorized API client service.
+        val HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport()
+
+        val flow = getGoogleAuthorizationFlow(HTTP_TRANSPORT)
+
+        val tokenResponse: TokenResponse = flow.newTokenRequest(code).setRedirectUri(cfg.callbackUrl).execute()
+        // store credential and return it
+        flow.createAndStoreCredential(tokenResponse, "user")
+
+        response.sendRedirect("loadData")
+
+        return ResponseEntity<Any?>(HttpStatus.OK)
     }
 
     @GetMapping("/loadData")
     @Throws(IOException::class, GeneralSecurityException::class)
-    fun loadData(): String {
+    fun loadData(
+        @RequestParam("isOnInit", required = false, defaultValue = "false") isOnInit: Boolean = false,
+        response: HttpServletResponse? = null
+    ): Any? {
+
         logger.info("Starting loadData")
         var errorCount = 0
         try {
             // Build a new authorized API client service.
             val HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport()
-            val service = Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+
+            val flow = getGoogleAuthorizationFlow(HTTP_TRANSPORT)
+
+            val credential: Credential? = flow.loadCredential("user")
+
+            val credentialValid = credential != null
+                && (credential.refreshToken != null || credential.expiresInSeconds == null || credential.expiresInSeconds > 60)
+
+            if (!credentialValid) {
+                if (isOnInit) {
+                    logger.info("Application try to load data from google spreadsheet on startup but the credential is invalid so it will load data when there's request to /gApi/loadData")
+                    return null
+                }
+                val authorizationUrl: String = flow.newAuthorizationUrl().setRedirectUri(cfg.callbackUrl).build()
+                response!!.sendRedirect(authorizationUrl)
+                return ResponseEntity<Any?>(HttpStatus.OK)
+            }
+
+            val service = Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential!!)
                 .setApplicationName(cfg.applicationName)
                 .build()
             val response = service.spreadsheets().get(cfg.spreadsheetId).execute()

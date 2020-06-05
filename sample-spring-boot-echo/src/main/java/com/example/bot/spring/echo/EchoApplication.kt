@@ -49,7 +49,7 @@ open class EchoApplication {
     @EventListener
     fun loadDataOnStart(event: ApplicationReadyEvent) {
         try {
-            loadDataController.loadData()
+            loadDataController.loadData(true)
         } catch (t: Throwable) {
             t.printStackTrace()
         }
