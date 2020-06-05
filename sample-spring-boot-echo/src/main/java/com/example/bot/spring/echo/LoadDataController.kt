@@ -151,7 +151,7 @@ class LoadDataController {
                     } ?: listOf()
                 }
             }
-            val message = "Data loaded success with ${errorCount} errors. Number of question sets = ${EchoApplication.questionAndAnswerSets.size}. Total number of questions = ${EchoApplication.questionAndAnswerSets.sumBy { it.questionAndAnswers.size }}"
+            val message = "Data loaded successfully with ${errorCount} errors. Number of question sets = ${EchoApplication.questionAndAnswerSets.size}. Total number of questions = ${EchoApplication.questionAndAnswerSets.sumBy { it.questionAndAnswers.size }}"
             logger.info(message)
             return message
         } catch (t: Throwable) {
