@@ -21,6 +21,7 @@ import com.linecorp.bot.model.event.Event
 import com.linecorp.bot.model.event.MessageEvent
 import com.linecorp.bot.model.event.message.TextMessageContent
 import com.linecorp.bot.model.message.FlexMessage
+import com.linecorp.bot.model.message.ImageMessage
 import com.linecorp.bot.model.message.Message
 import com.linecorp.bot.model.message.TextMessage
 import com.linecorp.bot.model.message.flex.component.Box
@@ -38,6 +39,8 @@ import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.event.EventListener
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories
+import java.net.URI
+import java.net.URL
 import java.util.*
 import java.util.concurrent.PriorityBlockingQueue
 import java.util.concurrent.TimeUnit
@@ -101,13 +104,13 @@ open class EchoApplication {
     }
 
     @EventMapping
-    fun handleTextMessageEvent(event: MessageEvent<TextMessageContent>): Message {
+    fun handleTextMessageEvent(event: MessageEvent<TextMessageContent>): List<Message> {
         log(event)
         log.info("event: $event")
         val text = event.message.text
         for (qnaSet in questionAndAnswerSets) {
             if (text == qnaSet.name) {
-                return showMenuForQSelection(qnaSet)
+                return listOf(showMenuForQSelection(qnaSet))
             }
         }
         for (qnaSet in questionAndAnswerSets) {
@@ -117,7 +120,7 @@ open class EchoApplication {
                 }
             }
         }
-        return showMenuForQnaSetSelection()
+        return listOf(showMenuForQnaSetSelection())
     }
 
     fun showMenuForQnaSetSelection(): Message {
@@ -204,8 +207,17 @@ open class EchoApplication {
             .build()
     }
 
-    private fun showAnswer(qna: QuestionAndAnswer): Message {
-        return TextMessage.builder().text(qna.answer!!).build()
+    private fun showAnswer(qna: QuestionAndAnswer): List<Message> {
+        return qna.answers.map {
+            when {
+                it.matches(Regex("(http|https):.*(\\.)(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF|tif|TIF|tiff|TIFF)")) -> {
+                    ImageMessage.builder().originalContentUrl(URI(it)).previewImageUrl(URI(it)).build()
+                }
+                else -> {
+                    TextMessage.builder().text(it).build()
+                }
+            }
+        }
     }
 
     companion object {

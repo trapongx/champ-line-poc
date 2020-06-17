@@ -128,7 +128,7 @@ class LoadDataController {
                 .build()
             val response = service.spreadsheets().get(cfg.spreadsheetId).execute()
             EchoApplication.questionAndAnswerSets = response.sheets.map { sheet ->
-                val range = "${sheet.properties.title}!A2:C"
+                val range = "${sheet.properties.title}!A2:Z"
                 val valueRange = service.spreadsheets().values().get(cfg.spreadsheetId, range).execute()
                 QuestionAndAnswerSet().also {
                     it.name = sheet.properties.title
@@ -141,7 +141,7 @@ class LoadDataController {
                             QuestionAndAnswer().also {
                                 it.code = row[0].toString()
                                 it.question = row[1].toString()
-                                it.answer = row[2].toString()
+                                it.answers = row.subList(2, row.size).mapNotNull { it as? String }.filter { !it.isNullOrBlank() }
                             }
                         } catch (t: Throwable) {
                             errorCount++
