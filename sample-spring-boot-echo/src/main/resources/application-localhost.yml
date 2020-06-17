@@ -17,8 +17,8 @@
 # Make a copy called `application.yml` and change the values below.
 
 line.bot:
-  channel-token: 08Q+QMNfeZYOn1wb+sHhZ4eUkM4XP00YXM6rx1ilnuyMHgXIlnVALnESs2qjEbo3fui5IMt0u752sWrlnspJiyo8wdZjR/H1MsAouBnOADz1gzZ/qx5Th6HLZ6hAE3X+u3O+Zvtgm2VjgBUXQkK7rQdB04t89/1O/w1cDnyilFU=
-  channel-secret: 44aab238f77aaed7ef0363919f5c6c7c
+  channel-token: ZNPtJ53jPdUYiIWkWIn0kFZflqDkQHMC8wpZB5ce7+rCYohXkGdT6YGQ4GblAfsfTbYxIfmK0pJqACTfv1mslJHRZHJDvuYYU5FLNKtHJ4reQ8wWusEFGTBF5eP0eW8ZUCWbKQghJxl7d1iqJl9osAdB04t89/1O/w1cDnyilFU=
+  channel-secret: 65d09beaffe9cc99caf2cb22db3e4054
   handler.path: /callback
 
 # To remove Client wire logs. Please comment out following lines.
@@ -33,6 +33,10 @@ server.ssl.keyStoreType: PKCS12
 
 #   com.linecorp.bot.client.wire: INFO
 spring:
+  data:
+    mongodb:
+      # uri: mongodb+srv://user:8;k,x]vf4yp@ipstchatbot-truzl.mongodb.net/IpstChatbot
+      uri: mongodb+srv://user:8;k,x]vf4yp@mspchamp-km0nj.mongodb.net/IpstChatbotLocalHost
   security:
     oauth2:
       resourceserver:
@@ -43,6 +47,6 @@ spring:
 ipst:
   google:
     applicationName: IPST Line Chatbot
-    callbackUrl: https://champ-line-poc-d0e20c44.localhost.run/gApi/callback
+    callbackUrl: https://admin-d17ae097.localhost.run/gApi/callback
     credentialsFilePath: /credentials-localhost.json
     spreadsheetId: 1YXKi-edabERHUg4v1OSBLcylZv7ol0PW69inID7cH7k

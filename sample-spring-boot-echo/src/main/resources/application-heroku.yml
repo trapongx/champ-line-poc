@@ -29,6 +29,10 @@ server:
   port: 64111
 #   com.linecorp.bot.client.wire: INFO
 spring:
+  data:
+    mongodb:
+      # uri: mongodb+srv://user:8;k,x]vf4yp@ipstchatbot-truzl.mongodb.net/IpstChatbot
+      uri: mongodb+srv://user:8;k,x]vf4yp@mspchamp-km0nj.mongodb.net/IpstChatbotHeroku
   security:
     oauth2:
       resourceserver:

@@ -15,6 +15,7 @@
  */
 package com.example.bot.spring.echo
 
+import com.google.common.collect.Queues
 import com.linecorp.bot.model.action.MessageAction
 import com.linecorp.bot.model.event.Event
 import com.linecorp.bot.model.event.MessageEvent
@@ -36,15 +37,59 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.event.EventListener
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories
+import java.util.*
+import java.util.concurrent.PriorityBlockingQueue
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.locks.ReentrantLock
 
 @SpringBootApplication
 @LineMessageHandler
 @EnableConfigurationProperties
+@EnableMongoRepositories
 open class EchoApplication {
     private val log = LoggerFactory.getLogger(EchoApplication::class.java)
 
     @Autowired
     private lateinit var loadDataController: LoadDataController
+
+    @Autowired
+    private lateinit var chatLogRepository: ChatLogRepository
+
+    private var loggerThread: Thread? = null
+    private val logQueue: Queue<ChatLog> = LinkedList()
+    private val logQueueLock = ReentrantLock()
+
+    private fun log(event: MessageEvent<TextMessageContent>) {
+        ChatLog().also {
+            it.source = event.source
+            it.message = event.message
+        }.also {
+            logQueue.add(it)
+        }
+
+        if (logQueueLock.tryLock(1000, TimeUnit.SECONDS)) {
+            try {
+                if (loggerThread == null || !loggerThread!!.isAlive) {
+                    loggerThread = Thread(Runnable {
+                        try {
+                            while (!logQueue.isEmpty()) {
+                                logQueue.poll().also {
+                                    chatLogRepository.save(it)
+                                }
+                            }
+                        } catch (t: Throwable) {
+                            t.printStackTrace()
+                        }
+                    }).also {
+                        it.start()
+                    }
+                }
+            } finally {
+                logQueueLock.unlock()
+            }
+        }
+    }
 
     @EventListener
     fun loadDataOnStart(event: ApplicationReadyEvent) {
@@ -57,6 +102,7 @@ open class EchoApplication {
 
     @EventMapping
     fun handleTextMessageEvent(event: MessageEvent<TextMessageContent>): Message {
+        log(event)
         log.info("event: $event")
         val text = event.message.text
         for (qnaSet in questionAndAnswerSets) {
