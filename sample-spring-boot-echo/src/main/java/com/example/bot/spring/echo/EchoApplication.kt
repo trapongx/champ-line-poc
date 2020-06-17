@@ -20,10 +20,7 @@ import com.linecorp.bot.model.action.MessageAction
 import com.linecorp.bot.model.event.Event
 import com.linecorp.bot.model.event.MessageEvent
 import com.linecorp.bot.model.event.message.TextMessageContent
-import com.linecorp.bot.model.message.FlexMessage
-import com.linecorp.bot.model.message.ImageMessage
-import com.linecorp.bot.model.message.Message
-import com.linecorp.bot.model.message.TextMessage
+import com.linecorp.bot.model.message.*
 import com.linecorp.bot.model.message.flex.component.Box
 import com.linecorp.bot.model.message.flex.component.Text
 import com.linecorp.bot.model.message.flex.container.Bubble
@@ -210,8 +207,11 @@ open class EchoApplication {
     private fun showAnswer(qna: QuestionAndAnswer): List<Message> {
         return qna.answers.map {
             when {
-                it.matches(Regex("(http|https):.*(\\.)(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF|tif|TIF|tiff|TIFF)")) -> {
+                it.matches(imageRegex) -> {
                     ImageMessage.builder().originalContentUrl(URI(it)).previewImageUrl(URI(it)).build()
+                }
+                it.matches(videoRegex) -> {
+                    VideoMessage.builder().originalContentUrl(URI(it)).previewImageUrl(URI(it)).build()
                 }
                 else -> {
                     TextMessage.builder().text(it).build()
@@ -222,6 +222,8 @@ open class EchoApplication {
 
     companion object {
         var questionAndAnswerSets: List<QuestionAndAnswerSet> = listOf()
+        val imageRegex = Regex("(http|https):.*(\\.)(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF|tif|TIF|tiff|TIFF).*")
+        val videoRegex = Regex("(http|https):.*(\\.)(mp4|MP4|mpg|MPG|avi|AVI|flv|FLV|wmv|WMV|wma|WMA).*")
 
         @JvmStatic
         fun main(args: Array<String>) {
