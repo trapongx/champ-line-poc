@@ -25,8 +25,12 @@ line.bot:
 # See: https://docs.spring.io/spring-boot/docs/current/reference/html/howto-logging.html
 #
 #logging.level:
-server:
-  port: 64111
+server.port: 443
+server.ssl.key-store: classpath:pfx.keystore
+server.ssl.key-store-password: springboot
+server.ssl.keyStoreType: PKCS12
+# server.ssl.keyAlias: bundle
+
 #   com.linecorp.bot.client.wire: INFO
 spring:
   security:
@@ -39,6 +43,6 @@ spring:
 ipst:
   google:
     applicationName: IPST LINE Chatbot
-    callbackUrl: http://chatbot.vspace.in.th:64111/gApi/callback
+    callbackUrl: https://chatbot.vspace.in.th/gApi/callback
     credentialsFilePath: /credentials-portainer.json
     spreadsheetId: 1YXKi-edabERHUg4v1OSBLcylZv7ol0PW69inID7cH7k
