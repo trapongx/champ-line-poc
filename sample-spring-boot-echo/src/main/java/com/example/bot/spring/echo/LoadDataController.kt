@@ -128,10 +128,11 @@ class LoadDataController {
                 .build()
             val response = service.spreadsheets().get(cfg.spreadsheetId).execute()
             EchoApplication.questionAndAnswerSets = response.sheets.map { sheet ->
-                val range = "${sheet.properties.title}!A2:G"
+                val range = "${sheet.properties.title}!A3:G"
                 val valueRange = service.spreadsheets().values().get(cfg.spreadsheetId, range).execute()
                 QuestionAndAnswerSet().also {
                     it.name = sheet.properties.title
+                    it.imageUrl = service.spreadsheets().values().get(cfg.spreadsheetId, "${sheet.properties.title}!B1").execute().getValues()?.get(0)?.get(0)?.toString()
                     it.questionAndAnswers = valueRange.getValues()?.mapNotNull { row ->
                         row as List<*>
                         try {

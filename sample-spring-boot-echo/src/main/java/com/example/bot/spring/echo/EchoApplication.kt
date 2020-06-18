@@ -22,6 +22,7 @@ import com.linecorp.bot.model.event.MessageEvent
 import com.linecorp.bot.model.event.message.TextMessageContent
 import com.linecorp.bot.model.message.*
 import com.linecorp.bot.model.message.flex.component.Box
+import com.linecorp.bot.model.message.flex.component.Image
 import com.linecorp.bot.model.message.flex.component.Text
 import com.linecorp.bot.model.message.flex.container.Bubble
 import com.linecorp.bot.model.message.flex.container.Carousel
@@ -135,12 +136,24 @@ open class EchoApplication {
                                 .body(
                                     Box.builder().layout(FlexLayout.HORIZONTAL)
                                         .content(
-                                            Text.builder()
-                                                .text(qnaSet.name)
-                                                .align(FlexAlign.CENTER)
-                                                .wrap(true)
-                                                .action(MessageAction(qnaSet.name, qnaSet.name))
-                                                .build()
+                                            when {
+                                                qnaSet.imageUrl.isNullOrBlank() -> {
+                                                    Text.builder()
+                                                        .text(qnaSet.name)
+                                                        .align(FlexAlign.CENTER)
+                                                        .wrap(true)
+                                                        .action(MessageAction(qnaSet.name, qnaSet.name))
+                                                        .build()
+                                                }
+                                                else -> {
+                                                    Image.builder()
+                                                        .url(URI(qnaSet.imageUrl!!))
+                                                        .align(FlexAlign.CENTER)
+                                                        .action(MessageAction(qnaSet.name, qnaSet.name))
+                                                        .build()
+                                                }
+                                            }
+
                                         ).build()
                                 )
                                 .footer(
