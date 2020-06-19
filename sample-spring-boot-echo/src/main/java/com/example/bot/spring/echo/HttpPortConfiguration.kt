@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Profile
 
 
 @Configuration
-@Profile("vspace")
+@Profile("vspace", "localhost")
 open class HttpPortConfiguration {
     @Value("\${http.port:80}")
     var httpPort: Int = 80
