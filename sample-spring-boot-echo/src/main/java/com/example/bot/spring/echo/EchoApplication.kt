@@ -27,6 +27,8 @@ import com.linecorp.bot.model.message.flex.component.Text
 import com.linecorp.bot.model.message.flex.container.Bubble
 import com.linecorp.bot.model.message.flex.container.Carousel
 import com.linecorp.bot.model.message.flex.unit.*
+import com.linecorp.bot.model.message.template.ImageCarouselColumn
+import com.linecorp.bot.model.message.template.ImageCarouselTemplate
 import com.linecorp.bot.spring.boot.annotation.EventMapping
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler
 import org.slf4j.LoggerFactory
@@ -126,54 +128,70 @@ open class EchoApplication {
             return TextMessage.builder().text("ขออภัย ระบบตอบกลับอัตโนมัติยังไม่พร้อมใช้งานในขณะนี้").build()
         }
 
-        return FlexMessage.builder()
-            .altText("เมนู")
-            .contents(
-                Carousel.builder()
+        return when (questionAndAnswerSets.all { !it.imageUrl.isNullOrBlank() }) {
+            true -> {
+                ImageCarouselTemplate(
+                    questionAndAnswerSets.map {qnaSet ->
+                        ImageCarouselColumn(URI(qnaSet.imageUrl), MessageAction(qnaSet.name!!.take(12), qnaSet.name))
+                    }
+                ).let {
+                    TemplateMessage("รายการชุดคำถาม", it)
+                }
+            }
+            false -> {
+                FlexMessage.builder()
+                    .altText("เมนู")
                     .contents(
-                        questionAndAnswerSets.map { qnaSet ->
-                            Bubble.builder().direction(FlexDirection.LTR)
-                                .body(
-                                    Box.builder().layout(FlexLayout.HORIZONTAL)
-                                        .content(
-                                            when {
-                                                qnaSet.imageUrl.isNullOrBlank() -> {
-                                                    Text.builder()
-                                                        .text(qnaSet.name)
-                                                        .align(FlexAlign.CENTER)
-                                                        .wrap(true)
-                                                        .action(MessageAction(qnaSet.name, qnaSet.name))
-                                                        .build()
-                                                }
-                                                else -> {
-                                                    Image.builder()
-                                                        .url(URI(qnaSet.imageUrl!!))
-                                                        .align(FlexAlign.CENTER)
-                                                        .action(MessageAction(qnaSet.name, qnaSet.name))
-                                                        .build()
-                                                }
-                                            }
+                        Carousel.builder()
+                            .contents(
+                                questionAndAnswerSets.map { qnaSet ->
+                                    Bubble.builder().direction(FlexDirection.LTR)
+                                        .body(
+                                            Box.builder().layout(FlexLayout.HORIZONTAL)
+                                                .content(
+                                                    when {
+                                                        qnaSet.imageUrl.isNullOrBlank() -> {
+                                                            Text.builder()
+                                                                .text(qnaSet.name)
+                                                                .align(FlexAlign.CENTER)
+                                                                .wrap(true)
+                                                                .action(MessageAction(qnaSet.name, qnaSet.name))
+                                                                .build()
+                                                        }
+                                                        else -> {
+                                                            Image.builder()
+                                                                .url(URI(qnaSet.imageUrl!!))
+                                                                .aspectMode(Image.ImageAspectMode.Fit)
+                                                                .aspectRatio(Image.ImageAspectRatio.R1TO1)
+                                                                .align(FlexAlign.CENTER)
+                                                                .action(MessageAction(qnaSet.name, qnaSet.name))
+                                                                .build()
+                                                        }
+                                                    }
 
-                                        ).build()
-                                )
-                                .footer(
-                                    Box.builder().layout(FlexLayout.HORIZONTAL)
-                                        .content(
-                                            Text.builder()
-                                                .text("หมวดคำถาม")
-                                                .wrap(true)
-                                                .color("#C3C2BE")
-                                                .size(FlexFontSize.XXS)
-                                                .align(FlexAlign.CENTER)
-                                                .margin(FlexMarginSize.MD)
-                                                .build()
-                                        ).build()
-                                )
-                                .build()
-                        }
-                    ).build()
-            )
-            .build()
+                                                ).build()
+                                        )
+                                        .footer(
+                                            Box.builder().layout(FlexLayout.HORIZONTAL)
+                                                .content(
+                                                    Text.builder()
+                                                        .text("หมวดคำถาม")
+                                                        .wrap(true)
+                                                        .color("#C3C2BE")
+                                                        .size(FlexFontSize.XXS)
+                                                        .align(FlexAlign.CENTER)
+                                                        .margin(FlexMarginSize.MD)
+                                                        .build()
+                                                ).build()
+                                        )
+                                        .build()
+                                }
+                            ).build()
+                    )
+                    .build()
+            }
+        }
+
     }
 
     private fun showMenuForQSelection(qnaSet: QuestionAndAnswerSet): Message {
